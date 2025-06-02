@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation } from 'react-router-dom'; 
 import styled from "styled-components";
-import SideBar from "../components/Layout/Sidebar";
+import SideBar from "../components/Layout/SideBar";
 import TrendingBar from "../components/Layout/TrendingBar"
 import { AiOutlineRetweet } from "react-icons/ai";
 import { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
