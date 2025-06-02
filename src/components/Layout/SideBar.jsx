@@ -83,7 +83,7 @@ function SideBar({tweets}) {
       </NavItem>
 
       <NavItem>
-        <StyledLink to="/profile" state={{ tweets }}>
+        <StyledLink to="/users/1/profile">
           <IconBox><FaRegUser /></IconBox>
           Profile
         </StyledLink>

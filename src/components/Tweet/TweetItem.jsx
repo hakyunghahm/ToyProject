@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 
 const TweetContainer = styled.div`
-    border-top: 0.8px solid #444;
+    border-bottom: 0.8px solid #444;
     color:white;
     width: 580px;
     padding: 10px 10px;
@@ -58,7 +58,7 @@ const StyledLink = styled(Link)`
 
 
 
-function TweetItem ({tweet, openModal, closeModal, deleteTweet }){
+function TweetItem ({ tweet, openModal }){
 
     return(
         <>
@@ -70,11 +70,11 @@ function TweetItem ({tweet, openModal, closeModal, deleteTweet }){
             <TweetContent>
                 <StyledLink to={`/${tweet.id}`} state={{tweet}}> 
                 <TweetUser>
-                    <UserName>{tweet.user}</UserName>
-                    <UserId>@sumrwaves </UserId>
-                    <TweetTime>ㆍ{tweet.time.slice(-5)}</TweetTime>
+                    <UserName>{tweet.author.username}</UserName>
+                    <UserId>@{tweet.author.userId} </UserId>
+                    <TweetTime>ㆍ{tweet.createdAt ? tweet.createdAt.slice(11, 16) : "시간 없음"}</TweetTime>
                 </TweetUser>
-                <TweetText>{tweet.text}</TweetText>
+                <TweetText>{tweet.content}</TweetText>
                 </StyledLink>
                 <TweetActions>
                 <span><HiOutlineChatBubbleOvalLeft color="gray" size="20px" /></span>

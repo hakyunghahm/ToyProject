@@ -114,10 +114,11 @@ const HeaderText = styled.div`
     font-weight: 700;
 `;
 
-function ViewPage() {
+function ViewPage({openModal}) {
   const location = useLocation();
   const tweet = location.state.tweet;
 
+  
   return (
     <ViewContainer>
       <SideBarContainer>
@@ -133,13 +134,13 @@ function ViewPage() {
             alt="프로필"
             />
              <UserInfo>
-                <UserName>{tweet.user}</UserName>
-                <UserId>@sumrwaves</UserId>
+                <UserName>{tweet.author.username}</UserName>
+                <UserId>{tweet.author.userId}</UserId>
             </UserInfo>
         </TweetUser>
 
-        <TweetText>{tweet.text}</TweetText>
-        <TweetDate>{tweet.time}</TweetDate>
+        <TweetText>{tweet.content}</TweetText>
+        <TweetDate>{tweet.createdAt ? tweet.createdAt.slice(11, 16) : "시간 없음"}</TweetDate>
 
         <Divider />
 

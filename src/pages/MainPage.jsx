@@ -1,11 +1,11 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import SideBar from "../components/Layout/Sidebar";
 import TrendingBar from "../components/Layout/TrendingBar"
 import TweetList from "../components/Tweet/TweetList";
 import TweetForm from "../components/Tweet/TweetForm"
 import styled from "styled-components";
 import DeleteModal from "../components/Tweet/DeleteModal";
-import moment from "moment";
+import { fetchAllTweets, writeTweet, deleteTweet as deleteTweetAPI } from "../api/api";
 
 const MainContainer = styled.div`
     display: flex;
@@ -59,22 +59,35 @@ const ActiveTab = styled(Tab)`
 
 function MainPage (){
 
-    //트윗 추가 
-    const [tweets, setTweets] = useState([]);
-    
-    const handleAddTweet = (text) => {
-        if (!text.trim()){
-            return;
-        }
-        const newTweet = {
-            id: Date.now(),
-            text,
-            user: "하경",
-            time: moment().format("YYYY년 MM월 DD일 HH:mm"),
-        };
-        setTweets([newTweet, ...tweets]);
-    };
-    
+  const [tweets, setTweets] = useState([]);
+
+  // 트윗 목록 불러오는 공통 함수로 분리
+  const loadTweets = async () => {
+    try {
+      const result = await fetchAllTweets();
+      setTweets(result.data.data.tweets);
+    } catch (error) {
+      console.error("트윗 로딩 실패:", error);
+    }
+  };
+  
+  // 트윗 추가
+  const handleAddTweet = async (text) => {
+    if (!text.trim()) return;
+  
+    try {
+      const response = await writeTweet({ userId: "1", content: text });
+      console.log("작성 결과:", response);
+      await loadTweets(); // 작성 후 목록 갱신
+    } catch (error) {
+      console.error("트윗 작성 실패:", error);
+    }
+  };
+  
+  // 컴포넌트 마운트 시 초기 트윗 로딩
+  useEffect(() => {
+    loadTweets();
+  }, []);
 
     //트윗 삭제 모달 관리 
     const [isModalOpen, setIsModalOpen] = useState(false); //삭제 상태 
@@ -90,16 +103,19 @@ function MainPage (){
         setTargetId(null);
       };
       
-      const deleteTweet = () => {
-        setTweets(tweets.filter((tweet) => tweet.id !== targetId));
-        closeModal();
+      const deleteTweet = async () => {
+          console.log("삭제 요청할 tweetId:", targetId);
+          await deleteTweetAPI(targetId, "1"); // ← userId도 같이 넘겨줌
+          const result = await fetchAllTweets();
+          setTweets(result.data.data.tweets); 
+          closeModal(); // 삭제 후 모달 닫기
       };
       
     
     return (
         <MainContainer>
           <SideBarContainer>
-            <SideBar tweets={tweets} />
+            <SideBar />
           </SideBarContainer>
       
           <MainCenter>
@@ -126,5 +142,5 @@ function MainPage (){
       );
       
 }
-
+ 
 export default MainPage; 

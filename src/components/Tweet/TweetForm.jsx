@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 const FormContainer = styled.form`
     padding: 10px 10px;
+    border-bottom: 0.8px solid #444;
 `;
 const ProfileImg = styled.img`
     width: 40px;

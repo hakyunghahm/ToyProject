@@ -11,8 +11,8 @@ function App(){
     <GlobalStyles/>
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/:id" element={<ViewPage />} /> 
-        <Route path="/profile" element={<ProfilePage />}/>
+        <Route path="/users/1/profile" element={<ProfilePage />}/>
+        <Route path="/:id" element={<ViewPage />} />     
       </Routes>
     </BrowserRouter>
   )

@@ -3,10 +3,10 @@ import SideBar from "../components/Layout/Sidebar";
 import TrendingBar from "../components/Layout/TrendingBar"
 import styled from "styled-components";
 import { GoArrowLeft } from "react-icons/go";
-import { useLocation } from 'react-router-dom'; 
+import { useState, useEffect } from "react"; 
 import TweetList from "../components/Tweet/TweetList";
 import { FaCalendarAlt } from "react-icons/fa";
-
+import { fetchMyProfile } from "../api/api";
 
 const ViewContainer = styled.div`
   display: flex;
@@ -136,12 +136,32 @@ const Tab = styled.div`
 `
 
 function ProfilePage (){
-  const location = useLocation();
-  const tweets = location.state.tweets;
+   const [profile, setProfile] = useState(null);
+
+   useEffect(()=>{
+        const fetchData = async () => {
+        const result = await fetchMyProfile("1")
+        setProfile (result.data);
+       }
+       fetchData();
+   }, []);
+    const userTweets = profile
+    ? (profile.content || []).map(tweet => ({
+        ...tweet,
+        author: {
+          username: profile.nickname,
+          profileImage: profile.profileImage,
+        },
+      }))
+    : [];
+
+    if (!profile || !profile.user) {
+      return <div style={{ color: "white", padding: "20px" }}>Loading...</div>;
+    }
+    
     return(
         <ViewContainer>
-             
-                
+
             <SideBarContainer>
             <SideBar />
             </SideBarContainer>
@@ -150,8 +170,8 @@ function ProfilePage (){
             <ViewHeader>
                 <GoArrowLeft size="20px" />
                 <HeaderText>
-                    <HeaderUser>하경</HeaderUser>
-                    <TweetsNum>{tweets.length} Posts</TweetsNum>
+                    <HeaderUser>{profile.user.nickname}</HeaderUser>
+                    <TweetsNum>{profile.content.length} Posts</TweetsNum>
                 </HeaderText>
             </ViewHeader>
 
@@ -159,13 +179,13 @@ function ProfilePage (){
             <CoverImage />
                 <ProfileSection>
                 <ProfileImage src="https://cdn-icons-png.flaticon.com/512/4159/4159471.png" alt="프로필" />
-                <Name>하경</Name>
-                <UserId>@sumrwaves</UserId>
-                <JoinDate><FaCalendarAlt size="12px"/> Joined January 2024</JoinDate>
+                <Name>{profile.user.nickname}</Name>
+                <UserId>{profile.user.userId}</UserId>
+                <JoinDate><FaCalendarAlt size="12px"/> Joined {profile.user.joinDate}</JoinDate>
                 <FollowInfo>
-                    <FollowerNum>0</FollowerNum>
+                    <FollowerNum>{profile.user.followerCount}</FollowerNum>
                     <FollowerText>Following </FollowerText>
-                    <FollowerNum>0</FollowerNum>
+                    <FollowerNum>{profile.user.followingCount}</FollowerNum>
                     <FollowerText>Followers</FollowerText>
                 </FollowInfo>
                 </ProfileSection>
@@ -182,7 +202,7 @@ function ProfilePage (){
             </Tabs>
             </ProfileBottom>
 
-            <TweetList tweets={tweets} />
+            <TweetList tweets={userTweets || []} /> 
 
             </ProfileCenter>
 
