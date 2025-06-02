@@ -1,5 +1,5 @@
 import React from "react";
-import SideBar from "../components/Layout/Sidebar";
+import SideBar from "../components/Layout/SideBar";
 import TrendingBar from "../components/Layout/TrendingBar"
 import styled from "styled-components";
 import { GoArrowLeft } from "react-icons/go";
