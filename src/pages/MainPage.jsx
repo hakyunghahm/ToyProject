@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import SideBar from "../components/Layout/Sidebar";
+import SideBar from "../components/Layout/SideBar";
 import TrendingBar from "../components/Layout/TrendingBar"
 import TweetList from "../components/Tweet/TweetList";
 import TweetForm from "../components/Tweet/TweetForm"
